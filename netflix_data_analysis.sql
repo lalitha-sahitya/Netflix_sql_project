@@ -96,4 +96,37 @@ WHERE type = 'TV Show'
   AND CAST(SUBSTRING_INDEX(duration, ' ', 1) AS UNSIGNED) > 5
   AND duration LIKE '%Season%';
   
+-- 9.count no of content items in each genre
 
+select count(show_id), listed_in
+from netflix_data
+group by listed_in;
+
+-- 10. Find each year and the average numbers of content release in India on netflix. return top 5 year with highest avg content release
+
+select YEAR(STR_TO_DATE(date_added, '%M %d, %Y')) as year_added, count(show_id)/12.0 AS avg_count
+from netflix_data
+WHERE country='India'
+group by 1
+order by 2 DESC
+LIMIT 5;
+
+-- 11. List all movies that are documentaries
+
+select *
+from netflix_data
+where listed_in LIKE '%Documentaries%';
+
+-- 12. Find all content without a director
+
+select *
+from netflix_data
+where director is null or TRIM(director)='';
+
+-- 13. Find how many movies actor 'Salman Khan' appeared in last 10 years!
+
+select *
+from netflix_data
+where cast LIKE '%Salman Khan%' and YEAR(str_to_date(date_added, '%M %d, %Y'))>=YEAR(curdate())-10;
+
+-- 14. Find the top 10 actors who have appeared in the highest number of movies produced in India.
