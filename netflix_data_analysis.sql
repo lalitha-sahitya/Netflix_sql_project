@@ -130,3 +130,29 @@ from netflix_data
 where cast LIKE '%Salman Khan%' and YEAR(str_to_date(date_added, '%M %d, %Y'))>=YEAR(curdate())-10;
 
 -- 14. Find the top 10 actors who have appeared in the highest number of movies produced in India.
+
+select count(*),
+  SUBSTRING_INDEX(cast, ',', 1) AS first_actor
+from netflix_data
+where country LIKE '%India' and TRIM(cast) != ''
+group by 2
+order by 1 desc
+limit 10;
+
+/*
+Question 15:
+Categorize the content based on the presence of the keywords 'kill' and 'violence' in 
+the description field. Label content containing these keywords as 'Bad' and all other 
+content as 'Good'. Count how many items fall into each category.
+*/
+SELECT category, content_type, COUNT(*) AS content_count
+FROM (
+  SELECT 
+    type AS content_type,
+    CASE 
+      WHEN description LIKE '%kill%' OR description LIKE '%violence%' THEN 'Bad'
+      ELSE 'Good'
+    END AS category
+  FROM netflix_data
+) AS categorized_content
+GROUP BY category, content_type;
