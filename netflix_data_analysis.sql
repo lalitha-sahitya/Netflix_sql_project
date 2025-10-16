@@ -155,4 +155,4 @@ FROM (
     END AS category
   FROM netflix_data
 ) AS categorized_content
-GROUP BY category, content_type;
+GROUP BY category, content_type; 
